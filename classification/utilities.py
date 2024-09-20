@@ -20,6 +20,8 @@ import matplotlib.cm as cm
 import numpy as np
 
 import time
+import math
+from tqdm import tqdm
 
 import imageio as im
 import skimage.transform as st
@@ -80,6 +82,31 @@ def read_images_steering_directions(steering_image_log, image_folder):
             
     return imgs, steerings
 
+def read_dave2_data(steering_image_log, image_folder):
+    steerings = []
+    imgs = []
+
+    with open(steering_image_log) as f:
+        for line in tqdm(f.readlines()):
+            steering = float(line.split()[1]) * math.pi / 180
+            steering_label = np.zeros(3)
+
+            if steering > 0.15: # right
+                steering_label[2] = 1
+            elif steering < -0.15: # left
+                steering_label[0] = 1
+            else: # straight
+                steering_label[1] = 1
+            
+            img = im.imread(path.join(image_folder, line.split()[0]))
+            crop_img = img[80:,:]
+            img = st.resize(crop_img, (128, 128))
+
+            steerings.append(steering_label)
+            imgs.append(img)
+
+    return imgs, steerings
+
 def softmax(x):
     """Compute softmax values for each sets of scores in x."""
 
@@ -93,6 +120,19 @@ class SDC_data:
         
         self.attack_data = np.asarray(data)
         self.attack_labels = np.asarray(labels)
+
+        print('Data shape:', self.attack_data.shape)
+        print('Labels shape:', self.attack_labels.shape)
+
+class Dave_data:
+    def __init__(self, image_file, image_folder):
+        data, labels = read_dave2_data(image_file, image_folder)
+        
+        self.attack_data = np.asarray(data)
+        self.attack_labels = np.asarray(labels)
+
+        print('Data shape:', self.attack_data.shape)
+        print('Labels shape:', self.attack_labels.shape)
 
 
 def generate_data(data, samples, targeted=True, start=0, inception=False):

@@ -10,9 +10,10 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras.optimizers import SGD
 from keras.utils import np_utils
 from keras.models import load_model
+from keras.callbacks import ModelCheckpoint, EarlyStopping
 from os import path
 
-from utilities import SDC_data
+from utilities import SDC_data, Dave_data
     
 def train(data, file_name, params, num_epochs = 50, batch_size = 128, init = None):
     """
@@ -55,12 +56,14 @@ def train(data, file_name, params, num_epochs = 50, batch_size = 128, init = Non
                   optimizer=sgd,
                   metrics=['accuracy'])
     
-    model.fit(data.attack_data, data.attack_labels,
-              batch_size=batch_size,
-              validation_split = 0.1,
-              nb_epoch=num_epochs,
-              shuffle=True)
-    
+
+    model.fit(data.attack_data, data.attack_labels, 
+                batch_size=batch_size, 
+                epochs=num_epochs, 
+                validation_split = 0.1,
+                shuffle = True,
+                callbacks = [ModelCheckpoint(file_name + "_best.h5", save_best_only = True),
+                             EarlyStopping(monitor='val_loss', patience=10, restore_best_weights = True)])
 
     if file_name != None:
         model.save(file_name)
@@ -70,8 +73,8 @@ def train(data, file_name, params, num_epochs = 50, batch_size = 128, init = Non
 if not os.path.isdir('models'):
     os.makedirs('models')
 
-IMAGE_FILE = 'straight_right_left.csv'
-IMAGE_FOLDER = '/home/alesia/Documents/sdc/'
+IMAGE_FILE = '/home/jzhang2297/data/dave_test/driving_dataset/data.txt'
+IMAGE_FOLDER = '/home/jzhang2297/data/dave_test/driving_dataset/'
 
-train(SDC_data(IMAGE_FILE, IMAGE_FOLDER), "models/sdc_epoch", [32, 64, 128, 1024, 3], num_epochs = 50)
+train(Dave_data(IMAGE_FILE, IMAGE_FOLDER), "models/sdc_epoch", [32, 64, 128, 1024, 3], num_epochs = 50)
 

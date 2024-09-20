@@ -1,0 +1,7 @@
+
+__pycache__/
+
+logs/
+
+sdc_epoch
+*.h5
