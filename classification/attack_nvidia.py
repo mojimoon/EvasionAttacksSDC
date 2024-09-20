@@ -6,7 +6,7 @@ import sys
 
 import pickle
 import gzip
-from keras import backend as K
+from tensorflow.keras import backend as K
 K.set_learning_phase(1)
 from os import path
 import random
@@ -16,12 +16,12 @@ import time
 import imageio as im
 import skimage.transform as st
 
-from keras.optimizers import SGD
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation, Flatten
-from keras.layers import Conv2D, MaxPooling2D, BatchNormalization
-from keras.utils import np_utils
-from keras.models import load_model
+from tensorflow.keras.optimizers import SGD
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, BatchNormalization
+from tensorflow.python.keras.utils import np_utils
+from tensorflow.keras.models import load_model
 
 from utilities import SDC_data, generate_data
 from attack import L2ClassificationAttack

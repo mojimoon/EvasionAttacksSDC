@@ -1,11 +1,11 @@
 import numpy as np
 
-from keras.optimizers import SGD
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation, Flatten
-from keras.layers import Conv2D, MaxPooling2D, BatchNormalization
-from keras.utils import np_utils
-from keras.models import load_model
+from tensorflow.keras.optimizers import SGD
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, BatchNormalization
+from tensorflow.python.keras.utils import np_utils
+from tensorflow.keras.models import load_model
 
 import imageio as im
 import skimage.transform as st

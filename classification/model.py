@@ -6,11 +6,10 @@ import sys
 
 import pickle
 import gzip
-import urllib.request
 
 from os import path
 import random
-from keras import backend as K
+from tensorflow.keras import backend as K
 K.set_learning_phase(0)
 
 import matplotlib
@@ -25,12 +24,12 @@ import time
 import imageio as im
 import skimage.transform as st
 
-from keras.optimizers import SGD
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation, Flatten
-from keras.layers import Conv2D, MaxPooling2D, BatchNormalization
-from keras.utils import np_utils
-from keras.models import load_model
+from tensorflow.keras.optimizers import SGD
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, BatchNormalization
+from tensorflow.python.keras.utils import np_utils
+from tensorflow.keras.models import load_model
 
 IMAGE_SIZE = 128
 NUM_CHANNELS = 3
@@ -73,9 +72,15 @@ class SDC_model_epoch:
 
         self.model = model
 
+        self.fn = lambda correct, predicted: tf.nn.softmax_cross_entropy_with_logits_v2(labels = correct, logits = predicted)
+        self.sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+        self.model.compile(loss=self.fn, optimizer=self.sgd, metrics=['accuracy'])
+
     def predict(self, data):
         return self.model(data)
-
+    
+    def evaluate(self, data, labels, batch_size = 128):
+        return self.model.evaluate(data, labels, batch_size = batch_size)
 
 
 class SDC_model_nvidia:

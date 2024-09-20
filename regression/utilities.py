@@ -4,12 +4,12 @@ import imageio as im
 import os
 import skimage.transform as st
 
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation, Flatten
-from keras.layers import Conv2D, MaxPooling2D
-from keras.optimizers import SGD, Adam
-from keras.utils import np_utils
-from keras.models import load_model
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
+from tensorflow.keras.layers import Conv2D, MaxPooling2D
+from tensorflow.keras.optimizers import SGD, Adam
+from tensorflow.python.keras.utils import np_utils
+from tensorflow.keras.models import load_model
 from os import path
 
 

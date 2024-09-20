@@ -81,12 +81,16 @@ def read_images_steering_directions(steering_image_log, image_folder):
             
     return imgs, steerings
 
-def read_dave2_data(steering_image_log, image_folder):
+def read_dave2_data(steering_image_log, image_folder, n=0):
     steerings = []
     imgs = []
 
     with open(steering_image_log) as f:
-        for line in tqdm(f.readlines()):
+        if n != 0:
+            selected_lines = random.sample(f.readlines(), n)
+        else:
+            selected_lines = f.readlines()
+        for line in tqdm(selected_lines):
             steering = float(line.split()[1]) * math.pi / 180
             steering_label = np.zeros(3)
 
@@ -124,8 +128,8 @@ class SDC_data:
         print('Labels shape:', self.attack_labels.shape)
 
 class Dave_data:
-    def __init__(self, image_file, image_folder):
-        data, labels = read_dave2_data(image_file, image_folder)
+    def __init__(self, image_file, image_folder, n=0):
+        data, labels = read_dave2_data(image_file, image_folder, n)
         
         self.attack_data = np.asarray(data)
         self.attack_labels = np.asarray(labels)
