@@ -5,16 +5,10 @@ import os
 
 root = '/home/jzhang2297/wangfan/EvasionAttacksSDC/classification'
 
-input_path = 'logs/log2.txt'
-save_path = 'reports/train_epoch_model.png'
+input_path = 'logs/log3.txt'
+save_path = 'reports/train_epoch_model_tf_1.14.png'
 
 def read_training_history(input_path):
-    """
-    Read training history
-    :param input_path: path to the training history file
-    :return: history
-    """
-
     '''
     match lines like:
     40865/40865 [==============================] - 498s 12ms/step - loss: 0.0452 - acc: 0.9838 - val_loss: 0.8909 - val_acc: 0.7492
@@ -37,11 +31,6 @@ def read_training_history(input_path):
     return history
 
 def plot_training_history(history, save_path):
-    """
-    Plot training history
-    :param history: the history object returned by model.fit
-    :param save_path: path to save the plot
-    """
     plt.figure()
     sns.set()
     plt.plot(history['loss'], label='loss')
@@ -49,6 +38,8 @@ def plot_training_history(history, save_path):
     plt.plot(history['val_loss'], label='val_loss')
     plt.plot(history['val_accuracy'], label='val_accuracy')
     plt.xlabel('Epoch')
+    plt.xticks(np.arange(1, len(history['loss'])+1, 1)) # 1-indexed
+    plt.title('Training History on Python 2.7, TensorFlow 1.14')
     plt.legend()
     plt.savefig(os.path.join(root, save_path))
     plt.close()

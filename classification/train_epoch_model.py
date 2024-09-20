@@ -4,13 +4,13 @@ import imageio as im
 import os
 import skimage.transform as st
 
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation, Flatten
-from keras.layers import Conv2D, MaxPooling2D
-from keras.optimizers import SGD
-from keras.utils import np_utils
-from keras.models import load_model
-from keras.callbacks import ModelCheckpoint, EarlyStopping
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
+from tensorflow.keras.layers import Conv2D, MaxPooling2D
+from tensorflow.keras.optimizers import SGD
+from tensorflow.python.keras.utils import np_utils
+from tensorflow.keras.models import load_model
+from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 from os import path
 
 from utilities import SDC_data, Dave_data
@@ -47,7 +47,7 @@ def train(data, file_name, params, num_epochs = 50, batch_size = 128, init = Non
         model.load_weights(init)
 
     def fn(correct, predicted):
-        return tf.nn.softmax_cross_entropy_with_logits(labels = correct,
+        return tf.nn.softmax_cross_entropy_with_logits_v2(labels = correct,
                                                        logits = predicted)
 
     sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
@@ -62,8 +62,8 @@ def train(data, file_name, params, num_epochs = 50, batch_size = 128, init = Non
                 epochs=num_epochs, 
                 validation_split = 0.1,
                 shuffle = True,
-                callbacks = [ModelCheckpoint(file_name + "_best.h5", save_best_only = True),
-                             EarlyStopping(monitor='val_loss', patience=10, restore_best_weights = True)])
+                callbacks = [ModelCheckpoint(file_name + "_tf_1.14.h5", save_best_only = True),
+                                EarlyStopping(patience = 10, restore_best_weights = True)])
 
     if file_name != None:
         model.save(file_name)
