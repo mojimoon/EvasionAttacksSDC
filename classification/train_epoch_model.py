@@ -15,7 +15,7 @@ from os import path
 
 from utilities import SDC_data, Dave_data
     
-def train(data, file_name, params, num_epochs = 50, batch_size = 128, init = None):
+def train(data, file_name, params, num_epochs = 50, batch_size = 256, init = None):
     """
     Standard neural network training procedure.
     """
@@ -50,7 +50,7 @@ def train(data, file_name, params, num_epochs = 50, batch_size = 128, init = Non
         return tf.nn.softmax_cross_entropy_with_logits_v2(labels = correct,
                                                        logits = predicted)
 
-    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+    sgd = SGD(lr=1e-3, decay=1e-6, momentum=0.9, nesterov=True)
     
     model.compile(loss=fn,
                   optimizer=sgd,
@@ -60,9 +60,9 @@ def train(data, file_name, params, num_epochs = 50, batch_size = 128, init = Non
     model.fit(data.attack_data, data.attack_labels, 
                 batch_size=batch_size, 
                 epochs=num_epochs, 
-                validation_split = 0.1,
+                validation_split = 0.2,
                 shuffle = True,
-                callbacks = [ModelCheckpoint(file_name + "_tf_1.14.h5", save_best_only = True),
+                callbacks = [ModelCheckpoint(file_name + "_b256.h5", save_best_only = True),
                                 EarlyStopping(patience = 10, restore_best_weights = True)])
 
     if file_name != None:

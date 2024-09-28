@@ -32,6 +32,8 @@ from tensorflow.keras.layers import Conv2D, MaxPooling2D, BatchNormalization
 from tensorflow.python.keras.utils import np_utils
 from tensorflow.keras.models import load_model
 
+from sklearn.model_selection import train_test_split
+
 def read_images_steering_directions(steering_image_log, image_folder):
     """
         Read the images with corresponding direction
@@ -134,8 +136,12 @@ class Dave_data:
         self.attack_data = np.asarray(data)
         self.attack_labels = np.asarray(labels)
 
-        print('Data shape:', self.attack_data.shape)
-        print('Labels shape:', self.attack_labels.shape)
+        # print('Data shape:', self.attack_data.shape)
+        # print('Labels shape:', self.attack_labels.shape)
+
+        self.train_X, self.test_X, self.train_y, self.test_y = train_test_split(self.attack_data, self.attack_labels, test_size=0.2, random_state=42)
+        self.train_X, self.val_X, self.train_y, self.val_y = train_test_split(self.train_X, self.train_y, test_size=0.2, random_state=42)
+        # train : val : test = 64 : 16 : 20
 
 
 def generate_data(data, samples, targeted=True, start=0, inception=False):
@@ -169,3 +175,34 @@ def generate_data(data, samples, targeted=True, start=0, inception=False):
     targets = np.array(targets)
 
     return inputs, targets
+
+def data_generator(xs, ys, target_size=(100,100), batch_size=64):
+    gen_state = 0
+    while 1:
+        if gen_state + batch_size > len(xs):
+            paths = xs[gen_state: len(xs)]
+            y = ys[gen_state: len(xs)]
+            X = [preprocess(x) for x in paths]
+            gen_state = 0
+        else:
+            paths = xs[gen_state: gen_state + batch_size]
+            y = ys[gen_state: gen_state + batch_size]
+            X = [preprocess(x) for x in paths]
+            gen_state += batch_size
+        yield np.array(X), np.array(y)
+
+def val_generator(xs, ys, batch_size=64):
+    gen_state = 0
+    while 1:
+        if gen_state + batch_size > len(xs):
+            paths = xs[gen_state: len(xs)]
+            y = ys[gen_state: len(xs)]
+            X = [preprocess(x) for x in paths]
+            yield np.array(X), np.array(y) #python2, use yield then return
+            return
+        else:
+            paths = xs[gen_state: gen_state + batch_size]
+            y = ys[gen_state: gen_state + batch_size]
+            X = [preprocess(x) for x in paths]
+            gen_state += batch_size
+            yield np.array(X), np.array(y)

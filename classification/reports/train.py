@@ -5,8 +5,8 @@ import os
 
 root = '/home/jzhang2297/wangfan/EvasionAttacksSDC/classification'
 
-input_path = 'logs/log3.txt'
-save_path = 'reports/train_epoch_model_tf_1.14.png'
+input_path = 'logs/log5.txt'
+save_path = 'reports/tmp.png'
 
 def read_training_history(input_path):
     '''
@@ -39,7 +39,7 @@ def plot_training_history(history, save_path):
     plt.plot(history['val_accuracy'], label='val_accuracy')
     plt.xlabel('Epoch')
     plt.xticks(np.arange(1, len(history['loss'])+1, 1)) # 1-indexed
-    plt.title('Training History on Python 2.7, TensorFlow 1.14')
+    plt.title('Training History')
     plt.legend()
     plt.savefig(os.path.join(root, save_path))
     plt.close()
