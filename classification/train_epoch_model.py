@@ -25,12 +25,12 @@ def train(data, file_name, params, num_epochs = 50, batch_size = 256, init = Non
     
     model.add(Activation('relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
+    model.add(Dropout(0.4))
 
     model.add(Conv2D(params[1], (3, 3)))
     model.add(Activation('relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
+    model.add(Dropout(0.4))
 
     model.add(Conv2D(params[2], (3, 3)))
     model.add(Activation('relu'))
@@ -62,7 +62,7 @@ def train(data, file_name, params, num_epochs = 50, batch_size = 256, init = Non
                 epochs=num_epochs, 
                 validation_split = 0.2,
                 shuffle = True,
-                callbacks = [ModelCheckpoint(file_name + "_b256.h5", save_best_only = True),
+                callbacks = [ModelCheckpoint(file_name + "_dropout.h5", save_best_only = True),
                                 EarlyStopping(patience = 10, restore_best_weights = True)])
 
     if file_name != None:

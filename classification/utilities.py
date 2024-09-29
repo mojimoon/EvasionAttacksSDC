@@ -9,7 +9,24 @@ import gzip
 
 from os import path
 import random
+
+# for Python 3.6
+# from keras import backend as K
+# from keras.optimizers import SGD
+# from keras.models import Sequential
+# from keras.layers import Dense, Dropout, Activation, Flatten
+# from keras.layers import Conv2D, MaxPooling2D, BatchNormalization
+# from keras.utils import np_utils
+# from keras.models import load_model
+
+# for Python 2.7
 from tensorflow.keras import backend as K
+from tensorflow.keras.optimizers import SGD
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, BatchNormalization
+from tensorflow.python.keras.utils import np_utils
+from tensorflow.keras.models import load_model
 K.set_learning_phase(0)
 
 import matplotlib
@@ -24,13 +41,6 @@ from tqdm import tqdm
 
 import imageio as im
 import skimage.transform as st
-
-from tensorflow.keras.optimizers import SGD
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, BatchNormalization
-from tensorflow.python.keras.utils import np_utils
-from tensorflow.keras.models import load_model
 
 from sklearn.model_selection import train_test_split
 

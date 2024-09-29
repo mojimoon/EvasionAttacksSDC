@@ -5,8 +5,8 @@ import os
 
 root = '/home/jzhang2297/wangfan/EvasionAttacksSDC/classification'
 
-input_path = 'logs/log5.txt'
-save_path = 'reports/tmp.png'
+input_path = 'logs/log6.txt'
+save_path = 'reports/train_epoch_model_dropout_0.4.png'
 
 def read_training_history(input_path):
     '''

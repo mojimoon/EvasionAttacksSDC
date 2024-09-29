@@ -1,8 +1,16 @@
 import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, Activation, MaxPooling2D, Dropout, Flatten, Dense
-from tensorflow.keras.optimizers import SGD
-from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
+
+# for Python 3.6
+from keras.models import Sequential
+from keras.layers import Conv2D, Activation, MaxPooling2D, Dropout, Flatten, Dense
+from keras.optimizers import SGD
+from keras.callbacks import ModelCheckpoint, EarlyStopping
+
+# for Python 2.7
+# from tensorflow.keras.models import Sequential
+# from tensorflow.keras.layers import Conv2D, Activation, MaxPooling2D, Dropout, Flatten, Dense
+# from tensorflow.keras.optimizers import SGD
+# from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 from kerastuner import HyperModel, RandomSearch
 
 import pandas as pd
