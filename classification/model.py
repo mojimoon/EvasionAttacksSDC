@@ -1,6 +1,7 @@
 import numpy as np
 
 import tensorflow as tf
+tf.compat.v1.enable_eager_execution()
 import os
 import sys
 
@@ -50,12 +51,12 @@ class SDC_model_epoch:
         model.add(Conv2D(32, (3, 3), input_shape =(image_size_param, image_size_param, num_channels_param)))
         model.add(Activation('relu'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.25))
+        model.add(Dropout(0.4))
 
         model.add(Conv2D(64, (3, 3)))
         model.add(Activation('relu'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Dropout(0.25))
+        model.add(Dropout(0.4))
 
         model.add(Conv2D(128, (3, 3)))
         model.add(Activation('relu'))
@@ -71,16 +72,32 @@ class SDC_model_epoch:
         model.load_weights(restore)
 
         self.model = model
+        self.model_path = restore
 
         self.fn = lambda correct, predicted: tf.nn.softmax_cross_entropy_with_logits_v2(labels = correct, logits = predicted)
         self.sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
-        self.model.compile(loss=self.fn, optimizer=self.sgd, metrics=['accuracy'])
+        self.model.compile(loss=self.fn, optimizer=self.sgd, metrics=['accuracy'], run_eagerly=True)
 
     def predict(self, data):
-        return self.model(data)
+        return self.model(data) # return logits
     
     def evaluate(self, data, labels, batch_size = 128):
         return self.model.evaluate(data, labels, batch_size = batch_size)
+    
+    def prob(self, data):
+        logits = self.predict(data)
+        return tf.nn.softmax(logits) # return probabilities
+    
+    def retrain(self, candidateX, candidatey, testX, testy, epochs, batch_size = 128):
+        best_acc = 0
+        for i in range(epochs):
+            self.model.fit(candidateX, candidatey, batch_size = batch_size, epochs = 1)
+            loss, acc = self.evaluate(testX, testy)
+            # print('Epoch:', i, 'Loss:', loss, 'Accuracy:', acc)
+            if acc > best_acc:
+                best_acc = acc
+                # self.model.save(self.model_path)
+        return best_acc
 
 
 class SDC_model_nvidia:

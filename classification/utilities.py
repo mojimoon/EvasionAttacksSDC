@@ -186,6 +186,7 @@ def generate_data(data, samples, targeted=True, start=0, inception=False):
 
     return inputs, targets
 
+'''
 def data_generator(xs, ys, target_size=(100,100), batch_size=64):
     gen_state = 0
     while 1:
@@ -216,3 +217,17 @@ def val_generator(xs, ys, batch_size=64):
             X = [preprocess(x) for x in paths]
             gen_state += batch_size
             yield np.array(X), np.array(y)
+'''
+
+def val_generator(xs, ys, batch_size=64):
+    _size = len(xs)
+    for start_idx in range(0, _size, batch_size):
+        end_idx = min(start_idx + batch_size, _size)
+        yield xs[start_idx:end_idx], ys[start_idx:end_idx]
+
+def data_generator(xs, ys, batch_size=64):
+    _size = len(xs)
+    while True:
+        for start_idx in range(0, _size, batch_size):
+            end_idx = min(start_idx + batch_size, _size)
+            yield xs[start_idx:end_idx], ys[start_idx:end_idx]
